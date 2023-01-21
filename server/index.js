@@ -8,6 +8,8 @@ import bodyParser from "body-parser";
 import helmet from "helmet";
 import path from "path";
 import { fileURLToPath } from "url";
+import authRoutes from "./routes/auth.js"
+import {register} from "./controllers/auth.js"
 
 // Configs
 const __fileName = fileURLToPath(import.meta.url);
@@ -37,6 +39,11 @@ const storage = multer.diskStorage({
 // Whenever someone uploads a file to your website it will be saved to the destination folder
 
 const upload = multer({storage}) //This upload variable will be used each time you want to save an uploaded file
+
+
+app.post("/auth/register", upload.single("picture"), register)
+
+app.use("/auth",authRoutes)
 
 
 //Setting up mongoose
