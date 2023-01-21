@@ -9,7 +9,11 @@ import helmet from "helmet";
 import path from "path";
 import { fileURLToPath } from "url";
 import authRoutes from "./routes/auth.js"
+import userRoutes from "./routes/users.js"
+import postRoutes from "./routes/posts.js"
 import {register} from "./controllers/auth.js"
+import { verifyToken } from "./middleware/auth.js";
+import {createPost} from "./controllers/posts.js"
 
 // Configs
 const __fileName = fileURLToPath(import.meta.url);
@@ -42,8 +46,13 @@ const upload = multer({storage}) //This upload variable will be used each time y
 
 
 app.post("/auth/register", upload.single("picture"), register)
+app.post("/routes",verifyToken,upload.single("picture"), createPost)
+
+//The reason we have that verifyToken middleware is because this should be only allowed for users that have been verified by our authentication
 
 app.use("/auth",authRoutes)
+app.use("/users",userRoutes)
+app.use("/posts",postRoutes)
 
 
 //Setting up mongoose

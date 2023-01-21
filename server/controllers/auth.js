@@ -50,20 +50,15 @@ export const login = async (req, res) => {
 
     if (!user) res.status(400).json({ msg: "User does not exist" });
 
-    const isMatch = bcrypt.compare(password,user.password)
+    const isMatch = bcrypt.compare(password, user.password);
 
-    if(!isMatch) res.status(400).json({ msg: "Invalid Credentials" });
+    if (!isMatch) res.status(400).json({ msg: "Invalid Credentials" });
 
-    const token = jwt.sign({id:user._id},process.env.JWT_SECRET)
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
-    delete user.password
+    delete user.password;
 
-    res.status(200).json({token,user})
-
-
-
-
-
+    res.status(200).json({ token, user });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
